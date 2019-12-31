@@ -1,0 +1,53 @@
+<!-- 分享 -->
+  <div class="popup share-popup">
+    <div class="share-panel">
+      <div class="share-bar">
+        <div class="icon ">
+          <i class="iconfont icon-qqkongjian"></i>
+          <p>QQ空间</p>
+        </div>
+        <div class="icon">
+          <i class="iconfont icon-fuzhilianjie"></i>
+          <p>复制</p>
+        </div>
+      </div>
+      <div class="share-btn-cancel">取消</div>
+    </div>
+  </div>
+
+
+
+.popup
+  position fixed
+  bottom 0
+  width 100%
+  height 142px
+  background pink 
+  transition 1s
+  // display none
+  .share-panel
+    height 100%
+    .share-bar
+      height 94px
+      background hsla(0,0%,100%,.95)
+      .icon
+        float left 
+        margin 10px
+        width 93px
+        height 80px
+        text-align center
+        .iconfont
+          font-size 40px
+          vertical-align middle
+          line-height 60px
+        .icon-qqkongjian
+          color orange 
+        p
+          font-size 12px      
+    .share-btn-cancel
+      height 48px
+      color #157efb
+      background #ffffff
+      text-align center
+      line-height 48px
+      font-size 16px
