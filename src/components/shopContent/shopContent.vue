@@ -48,6 +48,12 @@
       ...mapState({
         shopProducts: state => state.shop.shopProducts
       })
+    },
+    methods:{
+      productDetail(index){
+        console.log(index)
+        this.$router.push('/shop/productDetail')
+      },
     }
   }
 </script>

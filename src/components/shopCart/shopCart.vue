@@ -23,32 +23,40 @@
       return {
         isAdd:false,
         cartCount:0,
-        minute: 19, //分
-        second: 59 //秒
+        minute: 0, //分
+        second: 10 //秒
       }
     },
     methods:{
       addProduct(){
+        
+        clearInterval(secondTime)
+        clearInterval(minuteTime)
+        this.minute = 0
+        this.second = 10
         // 点击显示number
         this.isAdd = true
         // number添加
         this.cartCount++
         // 秒
-        let secondTime = setInterval(() => {
+        const secondTime = setInterval(() => {
           this.second = this.second -1
           if (this.second < 0) {
             this.second = 5
             if (this.minute <= 0) {
               clearInterval(secondTime)
-              this.second = 0
+              this.second = ''
+              this.isAdd = false
             }
           }
         },1000)
         // 分
-        let minuteTime = setInterval(() => {
+        const minuteTime = setInterval(() => {
           this.minute = this.minute -1
           if (this.minute <= 0) {
             clearInterval(minuteTime)
+            this.minute = ''
+            this.isAdd = false
           }
         }, 60000);
       }

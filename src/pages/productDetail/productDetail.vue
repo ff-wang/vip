@@ -248,6 +248,10 @@
       </p>
     </div>
     <ShopCart></ShopCart>
+    <!-- 收藏 -->
+    <transition name="collectWarp">
+      <div class="collect" v-if="collectText" :class="{active:isCollected}">{{collectText}}</div>
+    </transition>
   </div>
 </template>
 
@@ -265,10 +269,11 @@
         isSelected:false,
         currentIndex1:0,
         currentIndex2:'',
-        isCollected:false
+        isCollected:false,
+        collectText:'',
       }
     },
-    mounted(){
+     async mounted(){
       new Swiper ('.swiper-container', {
         loop: true, // 循环模式选项
         // 如果需要分页器
@@ -276,7 +281,7 @@
           el: '.swiper-pagination',
         }
       }),
-      this.$store.dispatch('getProductDetail')
+      await this.$store.dispatch('getProductDetail')
     },
     computed: {
       ...mapState({
@@ -295,6 +300,14 @@
       },
       isCollect(){
         this.isCollected = !this.isCollected
+        if (this.isCollected) {
+          this.collectText = '收藏成功'
+          setTimeout(() => {
+            this.collectText = ''
+          }, 1000);
+        }else{
+          this.collectText = '取消收藏'
+        }
       }
     }
   }
@@ -305,6 +318,27 @@
   .product-detail-wrap
     background #f3f4f5 
     overflow hidden
+    // 点击收藏
+    .collect
+      position fixed
+      top 60%
+      left 50%
+      transform translateX(-50%) translateY(-50%)
+      padding 14px 18px
+      border-radius 5px
+      text-align center
+      background rgba(0,0,0,.8)
+      z-index 15
+      color #ffffff
+      opacity 0
+      display none
+      &.collectWarp-enter-active, &.collectWarp-leave-active
+        transition all 1s
+      &.collectWarp-enter, &.collectWarp-leave-to
+        opacity 0
+      &.active
+        display block
+        opacity 1
     // <!-- 商品信息头部 -->
     .product-detail
       background #ffffff

@@ -44,7 +44,7 @@
       </li>
     </ul>
     <!-- 内容 -->
-    <shopContent :shopProducts="products"></shopContent>
+    <shopContent></shopContent>
     <!-- 底部 -->
     <div class="m-common-footer">
       <div class="footer_download">
@@ -73,6 +73,10 @@
     <!-- 遮罩 -->
     <div class="mask" v-if="isShow" @click="share()"></div>
   </div>
+  <!-- 收藏 -->
+  <transition name="collectWarp">
+    <div class="collect" v-if="collectText" :class="{active:isCollected}">{{collectText}}</div>
+  </transition>
   <!-- 分享 -->
   <div class="popup share-popup" v-if="isShow">
     <div class="share-panel">
@@ -104,9 +108,11 @@
         isChoosed:false,//点击有货商品
         isSelectedPrice:false,//点击价格
         isSelectedDiscunt:false,//点击折扣
-        isCollected:false,
+        isCollected:false,//是否收藏
         isShow:false, //是否显示分享
         // shopProducts:{}//是否有货返回的数据
+        sortProduct:[] ,//价格数组
+        collectText:'',
       }
     },
     computed: {
@@ -125,6 +131,14 @@
       // 收藏
       isCollect(){
         this.isCollected = !this.isCollected
+        if (this.isCollected) {
+          this.collectText = '收藏成功'
+          setTimeout(() => {
+            this.collectText = ''
+          }, 1000);
+        }else{
+          this.collectText = '取消收藏'
+        }
       },
       // 选择是否有货
       select(){
@@ -139,20 +153,31 @@
       // 点击价格 折扣
       isChangPriceDiscont(option){ 
         // 如果点击价格 
-        if (option===true) {
+        if (option===true && this.shopProducts) {
           this.isSelectedPrice = !this.isSelectedPrice
           this.isSelectedDiscunt = false
+          this.sortProduct = []
+          this.shopProducts.data.items.forEach(product => {
+            // console.log(product)
+            this.sortProduct.push(product)
+            this.sortProduct.sort((a,b)=>a.goodsPriceTag.salePrice - b.goodsPriceTag.salePrice)
+          })
+          this.shopProducts.data.items = this.sortProduct
         }else{
           // 如果点击折扣
           this.isSelectedDiscunt = !this.isSelectedDiscunt
           this.isSelectedPrice = false
+          this.sortProduct = []
+          this.shopProducts.data.items.forEach(product => {
+            this.sortProduct.push(product)
+            this.sortProduct.sort((a,b)=>a.goodsPriceTag.discount - b.goodsPriceTag.discount)
+          })
+          console.log(this.sortProduct)
+          this.shopProducts.data.items = this.sortProduct
         }
       },
-      productDetail(index){
-        console.log(index)
-        this.$router.push('/shop/productDetail')
-      },
-    }
+      
+    },
   }
 </script>
 
@@ -160,6 +185,26 @@
 #warp
   position relative
   height 667px
+  .collect
+    position fixed
+    top 60%
+    left 50%
+    transform translateX(-50%) translateY(-50%)
+    padding 14px 18px
+    border-radius 5px
+    text-align center
+    background rgba(0,0,0,.8)
+    z-index 15
+    color #ffffff
+    opacity 0
+    display none
+    &.collectWarp-enter-active, &.collectWarp-leave-active
+      transition all 1s
+    &.collectWarp-enter, &.collectWarp-leave-to
+      opacity 0
+    &.active
+      display block
+      opacity 1
   #shopContainer
     position absolute
     header 
