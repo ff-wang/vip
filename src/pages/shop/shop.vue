@@ -154,7 +154,7 @@
       isChangPriceDiscont(option){ 
         // 如果点击价格 
         if (option===true && this.shopProducts) {
-          this.isSelectedPrice = !this.isSelectedPrice
+          this.isSelectedPrice = true
           this.isSelectedDiscunt = false
           this.sortProduct = []
           this.shopProducts.data.items.forEach(product => {
@@ -165,12 +165,12 @@
           this.shopProducts.data.items = this.sortProduct
         }else{
           // 如果点击折扣
-          this.isSelectedDiscunt = !this.isSelectedDiscunt
+          this.isSelectedDiscunt = true
           this.isSelectedPrice = false
           this.sortProduct = []
           this.shopProducts.data.items.forEach(product => {
             this.sortProduct.push(product)
-            this.sortProduct.sort((a,b)=>a.goodsPriceTag.discount - b.goodsPriceTag.discount)
+            this.sortProduct.sort((a,b)=>a.goodsPriceTag.discount.substr(0,3)*10 - b.goodsPriceTag.discount.substr(0,3)*10)
           })
           console.log(this.sortProduct)
           this.shopProducts.data.items = this.sortProduct
@@ -183,7 +183,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 #warp
-  position relative
+  // position relative
   height 667px
   .collect
     position fixed
@@ -206,7 +206,7 @@
       display block
       opacity 1
   #shopContainer
-    position absolute
+    // position absolute
     header 
       width 100%
       height 44px
