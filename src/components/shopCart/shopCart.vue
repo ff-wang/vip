@@ -17,23 +17,22 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import throttle from 'lodah/throttle'
+  import throttle from 'lodash/throttle'
   export default {
     data(){
       return {
         isAdd:false,
         cartCount:0,
-        minute: 0, //分
-        second: 10 //秒
+        minute: 19, //分
+        second: 59 //秒
       }
     },
     methods:{
-      addProduct(){
-        
+      addProduct:throttle(function () {
         clearInterval(secondTime)
         clearInterval(minuteTime)
-        this.minute = 0
-        this.second = 10
+        this.minute = 19
+        this.second = 59
         // 点击显示number
         this.isAdd = true
         // number添加
@@ -59,7 +58,7 @@
             this.isAdd = false
           }
         }, 60000);
-      }
+      },1000, {trailing: false})
     }
   }
 </script>

@@ -786,6 +786,7 @@
       font-size 12px
     .m-common-footer
       height 157px
+      padding-bottom 42px
       .footer_download
         height 37px
         padding 8.7px 13px
