@@ -11,6 +11,7 @@
     "axios": "^0.19.0",
     "core-js": "^3.4.3",
     "lib-flexible": "^0.3.2",
+    "lodah": "^0.0.1-security",
     "mint-ui": "^2.2.13",
     "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.7",

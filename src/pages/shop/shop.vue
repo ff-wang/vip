@@ -44,59 +44,49 @@
       </li>
     </ul>
     <!-- 内容 -->
-    <div class="content">
-      <div class="day">
-        <span>剩2天</span>
+    <shopContent :shopProducts="products"></shopContent>
+    <!-- 底部 -->
+    <div class="m-common-footer">
+      <div class="footer_download">
+        <span class="download-logo">
+          <i class="icon-logo">唯品会</i>
+        </span>
+        <span class="download-text">唯品会客户端，特卖抢不停</span>
+        <span class="download-btn">下载</span>
       </div>
-      <div class="productList" v-if="shopProducts.data">
-        <div class="product"  @click="productDetail(index)" v-for="(product,index) in shopProducts.data.items" :key="index">
-          <div class="u-icon" v-if="product.icons">
-            <img :src="product.icons[0].image" alt="">
-          </div>
-          <img :src="product.goodsImageTags.image5.image" alt="">
-          <div class="product-price-wrap">
-            <!-- 普通专享价 -->
-            <div class="vip-price-wrap">
-              <div class="vip-price-msg">
-                <span>{{product.goodsPriceTag.pricePrefix}}</span>
-              </div>
-              <div class="vip-promotion-price">
-                <span class="promotion-price-wrapper">¥{{product.goodsPriceTag.salePrice}}</span>
-              </div>
-            </div>
-            <!-- 市场价折扣 -->
-            <div class="grally-price-wrapper">
-              <span class="grally-price">
-                <span>唯品价¥{{product.goodsPriceTag.referPrice}}</span>
-              </span>
-              <span class="mark-price">¥{{product.goodsPriceTag.marketPrice}}</span>
-              <span class="discount">{{product.goodsPriceTag.discount}}</span>
-            </div>
-          </div>
-          <!-- 商品信息 -->
-          <div class="product-name">
-            {{product.goodsName}}
-          </div>
-        </div>
+      <div class="footer-nav">
+        <p class="f-left">
+          <span>唯品会首页</span>
+          <span>关于我们</span>
+        </p>
+        <p class="f-right">
+          <span>登录</span>
+          <span>注册</span>
+        </p>
       </div>
+      <p class="copyright">Copyright © 2008-2019 m.vip.com, All Rights Reserved 粤ICP备08114786号</p>
+      <p class="psb">
+        <i class="iconfont icon-guohui"></i>
+        <span>粤公网安备 44010302000068号</span>
+      </p>
     </div>
     <!-- 遮罩 -->
-    <div class="mask"></div>
+    <div class="mask" v-if="isShow" @click="share()"></div>
   </div>
   <!-- 分享 -->
   <div class="popup share-popup" v-if="isShow">
     <div class="share-panel">
       <div class="share-bar">
-        <div class="icon ">
+        <a class="icon" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http%3A%2F%2Fm.vip.com%2Fbrand-100488547-0-0-0-1-0-1-20.html%3FbrandId%3D100488547%26tra_from%3Dm%253Ai%253A1572513420337_081a77a1b755eeb988a52a1948f870ae%253Ac%253Anature%253Awxclick%253Abrand_main_100488547_9_1%26from%3Dm%26device%3Di%26cid%3D1572513420337_081a77a1b755eeb988a52a1948f870ae%26f%3Dnature%253A0%253Abrand_main%26other%3Dwxclick%26mref%3Dbrand_main_100488547_9_1%26cid%3D1572513420337_081a77a1b755eeb988a52a1948f870ae%26share_type%3Dschedule%26msns%3Dshop_wap-0-qzone&title=%E7%B2%BE%E9%80%89%E5%93%81%E7%89%8C%EF%BC%8C100%25%E6%AD%A3%E5%93%81%E4%BF%9D%E8%AF%81+&summary=%E7%88%B1%E6%AD%A5ECCO%E7%94%B7%E5%A5%B3%E9%9E%8B%E4%B8%93%E5%9C%BA-%E5%93%81%E7%89%8C%E7%9F%A9%E7%8C%AE%EF%BC%8C%E5%94%AF%E5%93%81%E4%BC%9A%E4%B8%93%E4%BA%AB+&pics=%2F%2Fh2.appsimg.com%2Fa.appsimg.com%2Fupload%2Fbrand%2Fupcb%2F2019%2F12%2F26%2F158%2Fias_157734658295962_304x384_80.jpg&showcount=0">
           <i class="iconfont icon-qqkongjian"></i>
           <p>QQ空间</p>
-        </div>
+        </a>
         <div class="icon">
           <i class="iconfont icon-fuzhilianjie"></i>
           <p>复制</p>
         </div>
       </div>
-      <div class="share-btn-cancel"><p>取消</p></div>
+      <div class="share-btn-cancel" @click="isShow=false"><p>取消</p></div>
     </div>
   </div>
 </div>
@@ -104,14 +94,19 @@
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
+  import shopContent from '../../components/shopContent/shopContent'
   export default {
+    components:{
+      shopContent
+    },
     data(){
       return{
         isChoosed:false,//点击有货商品
         isSelectedPrice:false,//点击价格
         isSelectedDiscunt:false,//点击折扣
         isCollected:false,
-        isShow:false //是否显示分享
+        isShow:false, //是否显示分享
+        // shopProducts:{}//是否有货返回的数据
       }
     },
     computed: {
@@ -123,20 +118,32 @@
       this.$store.dispatch('getShop')
     },
     methods:{
+      // 点击分享
       share(){
         this.isShow = !this.isShow
       },
+      // 收藏
       isCollect(){
         this.isCollected = !this.isCollected
       },
+      // 选择是否有货
       select(){
         this.isChoosed = !this.isChoosed
+        if (this.isChoosed && this.shopProducts.data) {
+          const filterShopProducts = this.shopProducts.data.items.filter(item=>item.goodsAvailable)
+          this.shopProducts.data.items = filterShopProducts
+        }else{
+          this.$store.dispatch('getShop')
+        }
       },
-      isChangPriceDiscont(option){
+      // 点击价格 折扣
+      isChangPriceDiscont(option){ 
+        // 如果点击价格 
         if (option===true) {
           this.isSelectedPrice = !this.isSelectedPrice
           this.isSelectedDiscunt = false
         }else{
+          // 如果点击折扣
           this.isSelectedDiscunt = !this.isSelectedDiscunt
           this.isSelectedPrice = false
         }
@@ -144,7 +151,7 @@
       productDetail(index){
         console.log(index)
         this.$router.push('/shop/productDetail')
-      }
+      },
     }
   }
 </script>
@@ -154,7 +161,7 @@
   position relative
   height 667px
   #shopContainer
-    position relative
+    position absolute
     header 
       width 100%
       height 44px
@@ -188,14 +195,16 @@
       height 36px
       border-bottom  1px solid #cccccc
       background #ffffff
+      display flex
+      justify-content space-around
       li 
         box-sizing border-box
-        float left
         padding 0 19px
         border-right  1px solid #cccccc
         font-size 15px
         line-height 36px
-        background-image url('//h2.vipstatic.com/ms2-m.vipstatic.com/static/base/img/loading-goods-a25fb09a3e.png')
+        text-align center
+        // background-image url('//h2.vipstatic.com/ms2-m.vipstatic.com/static/base/img/loading-goods-a25fb09a3e.png')
         .outcircle
           float left
           width 14px
@@ -228,96 +237,14 @@
             height 5px
             display block
             font-size 10px
-            margin-bottom 2px
+            margin-bottom 1px
             color #cccccc
           .icon-shaixuan
             font-size 18px
             margin-right 8px
             color #aaaaaa
-    .content
-      .day
-        width 100%
-        height 35px
-        color #999999
-        font-size 12px
-        float right
-        line-height 35px
-        padding-right 5px
-        background white
-        span 
-          float right
-      .productList
-        width 100%
-        background #f3f4f5
-        .product
-          width 178px
-          height 330px
-          background #ffffff
-          position relative
-          margin-bottom 10px
-          float left 
-          margin 0 4px 10px
-          .u-icon
-            img 
-              position absolute
-              top 10px
-              right 10px
-              width 34px
-              height 34px
-          img 
-            width 100%
-            height 224px
-          .product-price-wrap
-            width 158px
-            height 32px
-            padding 0 10px 
-            margin 10px 0
-            .vip-price-wrap
-              height 16px
-              display flex
-              .vip-price-msg
-                width 30px
-                height 16px
-                padding 0 4px
-                white-space: nowrap
-                line-height 16px
-                color #ffffff
-                font-size 10px
-                background-image: linear-gradient(270deg,#cb78dc,#de3d96)
-              .vip-promotion-price
-                margin-left 4px
-                font-size 16px
-                color #222222
-            .grally-price-wrapper
-              height 12px
-              width 100%
-              margin-top 4px
-              font-size 10px
-              color #98989f
-              line-height 12px
-              span 
-                margin-right 4px
-              .market-price
-                  text-decoration:line-through
-          .product-name 
-            width 158px
-            height 17px
-            overflow hidden
-            text-overflow ellipsis
-            white-space nowrap
-            color #585c64
-            font-size 12px
-            padding 0 10px
-            line-height 17px
-    .mask
-      width 100%
-      height 100%
-      background rgba(0,0,0,.6)
-      position absolute
-      left 0 
-      top 0
-      z-index 10
-      display none
+        &:last-child
+          border none 
     .footer-nav
       height 12px
       padding 8.7px 8.7px 0
@@ -377,6 +304,15 @@
           text-align center
           line-height 24px
           border-radius 2px
+    .mask
+      width 100%
+      height 100%
+      background rgba(0,0,0,.6)
+      position absolute
+      left 0 
+      top 0
+      z-index 10
+      // display none
   .popup
     position fixed
     bottom 0
@@ -384,6 +320,7 @@
     height 142px
     background pink 
     transition 1s
+    z-index 20
     // display none
     .share-panel
       height 100%

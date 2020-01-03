@@ -4876,6 +4876,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodah@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.npm.taobao.org/lodah/download/lodah-0.0.1-security.tgz#9b0e5899a58b1574503f96ce1f43423a8cc80d70"
+  integrity sha1-mw5YmaWLFXRQP5bOH0NCOozIDXA=
+
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npm.taobao.org/lodash.clonedeep/download/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"

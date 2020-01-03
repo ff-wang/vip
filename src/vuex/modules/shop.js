@@ -4,21 +4,21 @@
 // import Vue from 'vue'
 import {
   RECEIVE_SHOP_RODUCTS,
-  RECEIVE_PRODUCT_DEATIL
+  RECEIVE_PRODUCT_DEATIL,
+  RECEIVE_GOODS_AVAILABLE,
+  // Add_Product_Count
 } from '../mutation-types'
 
 import {
-  // reqGoods,
-  // reqRatings,
-  // reqInfo,
   reqShopProducts,
-  reqProductsDetail
+  reqProductsDetail,
 } from '../../api'
 
 export default  {
   state: { 
     shopProducts: {}, // 当前商家
     productDetail: {}, // 当前商家商品详情
+    cartProduct:[] //购物车中的商品
   },
   mutations: {
 
@@ -31,8 +31,10 @@ export default  {
     },
     [RECEIVE_PRODUCT_DEATIL](state,{productDetail={}}){
       state.productDetail = productDetail
+    },
+    [RECEIVE_GOODS_AVAILABLE](state, {filterShopProducts={}}) {
+      state.shopProducts.data.items = filterShopProducts
     }
-  
   },
   actions: {
     /* 
@@ -54,7 +56,11 @@ export default  {
         const productDetail = result.data
         commit(RECEIVE_PRODUCT_DEATIL, {productDetail})
       }
-    }
+    },
+    //点击有货商品
+    async goodsAvailable({commit},{filterShopProducts}) {
+      commit(RECEIVE_SHOP_RODUCTS, {filterShopProducts})
+    },
   },
   getters: { 
     /* 
@@ -62,6 +68,5 @@ export default  {
       1. 初始显示
       2. 依赖数据发生改变   ===> 效率低
     */
-    
   }
 }

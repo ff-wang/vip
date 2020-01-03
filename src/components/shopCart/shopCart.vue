@@ -2,15 +2,57 @@
   <div>
     <div class="cart-box">
       <button class="icon">
-        <i class="iconfont icon-gouwuche"></i>
+        <i class="iconfont icon-gouwuche">
+          <span class="num-brage" v-if="isAdd">{{cartCount}}</span>
+        </i>
+        <span v-if="isAdd" class="text-box">
+          <span>{{minute}}</span>
+          <span>:</span>
+          <span>{{second}}</span>
+        </span>
       </button>
-      <button class="vip-button-large">加入购物车</button>
+      <button class="vip-button-large" @click="addProduct">加入购物车</button>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  // import throttle from 'lodah/throttle'
   export default {
+    data(){
+      return {
+        isAdd:false,
+        cartCount:0,
+        minute: 19, //分
+        second: 59 //秒
+      }
+    },
+    methods:{
+      addProduct(){
+        // 点击显示number
+        this.isAdd = true
+        // number添加
+        this.cartCount++
+        // 秒
+        let secondTime = setInterval(() => {
+          this.second = this.second -1
+          if (this.second < 0) {
+            this.second = 5
+            if (this.minute <= 0) {
+              clearInterval(secondTime)
+              this.second = 0
+            }
+          }
+        },1000)
+        // 分
+        let minuteTime = setInterval(() => {
+          this.minute = this.minute -1
+          if (this.minute <= 0) {
+            clearInterval(minuteTime)
+          }
+        }, 60000);
+      }
+    }
   }
 </script>
 
@@ -36,6 +78,21 @@
     .iconfont 
       font-size 22px
       color #585c64
+      position relative
+      .num-brage
+        width 16px
+        height 16px
+        border-radius 50%
+        background #de3d96
+        color white
+        position absolute
+        right -7px
+        top -7px
+        font-size 10px
+        text-align center
+        line-height 16px
+    .text-box
+      margin-left 5px
   .vip-button-large
     height 42px
     width 252px
