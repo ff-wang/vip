@@ -259,6 +259,7 @@
   import Swiper from 'swiper'
   import 'swiper/css/swiper.css'
   import {mapState} from 'vuex'
+  import {saveCartProducts} from '../../utils'
   import ShopCart from '../../components/shopCart/shopCart'
   export default {
     components:{
@@ -273,7 +274,7 @@
         collectText:'',
       }
     },
-     async mounted(){
+    mounted(){
       new Swiper ('.swiper-container', {
         loop: true, // 循环模式选项
         // 如果需要分页器
@@ -281,11 +282,20 @@
           el: '.swiper-pagination',
         }
       }),
-      await this.$store.dispatch('getProductDetail')
+      this.$store.dispatch('getProductDetail')
+      window.addEventListener('unload',()=>{
+        if(this.productDetail){
+          const {product:{productId}} = this.productDetail.data
+          const {cartProducts} = this
+          // console.log(this.cartProducts)
+          saveCartProducts(productId,cartProducts)
+        }
+      })
     },
     computed: {
       ...mapState({
-        productDetail: state => state.shop.productDetail || {}
+        productDetail: state => state.shop.productDetail || {},
+        cartProducts: state=>state.shop.cartProducts || []
       })
     },
     methods:{
@@ -309,6 +319,11 @@
           this.collectText = '取消收藏'
         }
       }
+    },
+    beforeDestroy(){
+      const {product:{productId}} = this.getProductDetail.data
+      const {cartProductCount} = this
+      saveCartProducts(productId,cartProductCount)
     }
   }
 </script>

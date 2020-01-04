@@ -3,7 +3,7 @@
     <div class="cart-box">
       <button class="icon">
         <i class="iconfont icon-gouwuche">
-          <span class="num-brage" v-if="isAdd">{{cartCount}}</span>
+          <span class="num-brage" v-if="isAdd">{{cartProducts[0].count}}</span>
         </i>
         <span v-if="isAdd" class="text-box">
           <span>{{minute}}</span>
@@ -18,16 +18,23 @@
 
 <script type="text/ecmascript-6">
   import throttle from 'lodash/throttle'
+  import { mapState } from 'vuex'
   export default {
     data(){
       return {
         isAdd:false,
-        cartCount:0,
         minute: 19, //分
         second: 59 //秒
       }
     },
+    computed:{
+      ...mapState({
+        cartProducts: state => state.shop.cartProducts,
+        productDetail:state => state.shop.productDetail
+      })
+    },
     methods:{
+      // 添加购物车
       addProduct:throttle(function () {
         clearInterval(secondTime)
         clearInterval(minuteTime)
@@ -35,8 +42,13 @@
         this.second = 59
         // 点击显示number
         this.isAdd = true
+        // let count = 0
         // number添加
-        this.cartCount++
+        if(this.productDetail&&this.productDetail.data){
+          const product  = this.productDetail.data.product
+          this.$store.commit('addCartProductCount',{product})
+
+        }
         // 秒
         const secondTime = setInterval(() => {
           this.second = this.second -1
